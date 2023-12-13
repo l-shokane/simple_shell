@@ -30,11 +30,11 @@ void execute_command(const char *command)
 		}
 		args[arg_count] = NULL;
 
-		if (execve(args[0], args, envp) == -1)
-		{
+		execvp(args[0], args);
+		
 			my_print("Error executing command.\n");
 			exit(EXIT_FAILURE);
-		}
+		
 	}
 	else
 	{
