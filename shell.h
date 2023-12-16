@@ -12,22 +12,22 @@
 #include <fcntl.h>
 #include <errno.h>
 
-/* This is for read/write buffers */
+/* for read/write buffers */
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
 #define BUF_FLUSH -1
 
-/* This is for command chaining */
+/* Used For command chaining */
 #define CMD_NORM	0
 #define CMD_OR		1
 #define CMD_AND		2
 #define CMD_CHAIN	3
 
-/* This for convert_number() */
+/* Used Fot convrt_num() */
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
 
-/* 1 if using system getline() */
+/*  getline() */
 #define USE_GETLINE 0
 #define USE_STRTOK 0
 
@@ -38,9 +38,9 @@ extern char **environ;
 
 
 /**
- * struct liststr - singly linked list
+ * struct liststr - This is a singly linked list
  * @num: the number field
- * @str:  string
+ * @str: a string
  * @next: points to the next node
  */
 typedef struct liststr
@@ -111,90 +111,126 @@ typedef struct builtin
 } builtin_table;
 
 
-/* Function prototypes */
-int chain_delim(info_t *info, char *buf, size_t *p);
-void scan_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len);
-int rep_alias(info_t *info);
-int new_vars(info_t *info);
-int str_change(char **old, char *new);
-char **split_str2(char *str, char d);
-char **split_str(char *str, char *d);
-int _putchar(char c);
-void my_print(char *str);
-char *strd_up(const char *str);
-char *copy_str(char *dest, char *src);
-int str_length(char *s);
-int str_cmp(char *s1, char *s2);
-char *_startswith(const char *shell, const char *command);
-char *str_cnct(char *dest, char *src);
-char *str_cnct(char *dest, char *src);
-int hsh(inf_t *info, char **av);
-int disc_builtin(info_t *info);
-void disc_cmd(inf_t *info);
-void exec_fork(info_t *info);
-char *shell_memset(char *s, char b, unsigned int n);
-void free_str(char **pp);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-int is_cmd(info_t *info, char *path);
-char *copy_chars(char *pathstr, int begin, int end);
-char *disc_path(inf_t *inf, char *pathstr, char *cmd);
-int be_free(void **ptr);
-int main(int ac, char **av);
-size_t length_list(const list_t *h);
-char **strings_lists(list_t *head);
-size_t my_printList(const list_t *h);
-list_t *node_create(list_t *node, char *prefix, char c);
-ssize_t get_index_node(list_t *head, list_t *node);
-list_t *node_next(list_t **head, const char *str, int num);
-list_t *add_end_node(list_t **head, const char *str, int num);
-size_t myprint_listStr(const list_t *h);
-int node_del_index(list_t **head, unsigned int index);
-void node_list_free(list_t **head_ptr);
+/*Prototypes 1 for hsh file */
+int hsh(info_t *, char **);
+int disc_builtin(info_t *);
+void disc_cmd(info_t *);
+void exec_fork(info_t *);
+
+/* Prototypes for pars.c */
+int _cmd(info_t *, char *);
+char *copy_chars(char *, int, int);
+char *disc_path(info_t *, char *, char *);
+
+/*  */
+int loophsh(char **);
+
+/* Prototypes for errs.c */
+void emy_print(char *);
+int _eputchar(char);
+int my_printsfd(char c, int fd);
+int my_printfd(char *str, int fd);
+
+/* Prototype for strr.c */
+int str_length(char *);
+int str_cmp(char *, char *);
+char *begins_with(const char *, const char *);
+char *str_cat(char *, char *);
+
+/* Prototypes for strr1.c */
+char *copy_str(char *, char *);
+char *strd_up(const char *);
+void my_print(char *);
+int _putchar(char);
+
+/*Prototype for exit.c */
+char *strn_copy(char *, char *, int);
+char *strn_cat(char *, char *, int);
+char *str_char(char *, char);
+
+/* Prototypes for token.c */
+char **split_str(char *, char *);
+char **split_str2(char *, char);
+
+/* Prototype for reall.c */
+char *shell_memset(char *, char, unsigned int);
+void ffree(char **);
+void *shell_realloc(void *, unsigned int, unsigned int);
+
+/* Prototype for mem.c */
+int bfree(void **);
+
+/* Prototype for atoi.c */
+int interactive(info_t *);
+int _delim(char, char *);
+int _alpha(int);
+int atoi_(char *);
+
+/* Prototypes for err1.c */
+int erra_toi(char *);
+void my_printError(info_t *, char *);
+int dec_print(int, int);
+char *convrt_num(long int, int, int);
+void rem_comments(char *);
+
+/* Prototype for builtin.c */
+int shell_exit(info_t *);
+int shell_cd(info_t *);
+int shell_help(info_t *);
+
+/* Prototype for builtin1.c */
+int shell_history(info_t *);
+int shell_alias(info_t *);
+
+/*Prototypes for get_line.c */
+ssize_t input_line(info_t *);
+int get_line(info_t *, char **, size_t *);
+void sigintHandler(int);
+
+/* Prototype for get_info.c */
+void init_info(info_t *);
+void put_info(info_t *, char **);
+void rem_info(info_t *, int);
+
+/* Prototype for env.c */
+char *get_env(info_t *, const char *);
+int shell_env(info_t *);
+int shell_setenv(info_t *);
+int shell_unsetenv(info_t *);
+int pop_list_env(info_t *);
+
+/* Prototypes for  */
+char **get_environ(info_t *);
+int unset_env(info_t *, char *);
+int set_env(info_t *, char *, char *);
+
+/* Prototypes for history.c */
 char *get_his_file(info_t *info);
-int write_hist(info_t *info);
+int write_his(info_t *info);
 int scan_his(info_t *info);
 int make_his_list(info_t *info, char *buf, int linecount);
 int new_numHis(info_t *info);
-ssize_t my_inputBuf(info_t *info, char **buf, size_t *len);
-ssize_t input_line(info_t *info);
-ssize_t search_buf(info_t *info, char *buf, size_t *i);
-int get_line(info_t *info, char **ptr, size_t *length);
-void sigintHandler(__attribute__((unused))int sig_num);
-void init_inf(info_t *info);
-void put_inf(info_t *info, char **av);
-void rem_inf(info_t *info, int all);
-char **get_environ(info_t *info);
-int unset_env(info_t *info, char *var);
-int set_env(inf_t *info, char *var, char *value);
-char *string_copy(char *dest, char *src, int n);
-char *strn_cat(char *dest, char *src, int n);
-char *str_char(char *s, char c);
-int erra_toi(char *s);
-void my_printError(info_t *info, char *estr);
-int dec_print(int input, int fd);
-char *convrt_num(long int num, int base, int flags);
-void rem_comments(char *buf);
-void emy_print(char *str);
-int _eputchar(char c);
-int my_printfd(char c, int fd);
-int my_printfd(char *str, int fd);
-int shell_env(info_t *info);
-char *get_env(info_t *info, const char *name);
-int shell_setenv(info_t *info);
-int shell_unsetenv(info_t *info);
-int pop_env_list(info_t *info);
-int shell_history(info_t *info);
-int unset_alias(info_t *info, char *str);
-int set_alias(info_t *info, char *str);
-int my_printAlias(list_t *node);
-int shell_alias(info_t *info);
-int my_cd(info_t *info);
-int shell_exit(info_t *info);
-int shell_help(info_t *info);
-int interactive(info_t *info);
-int _delim(char c, char *delim);
-int is_alpha(int c);
-int shell_atoi(char *s);
+
+/* Prototype for list.c */
+list_t *node_next(list_t **, const char *, int);
+list_t *add_end_node(list_t **, const char *, int);
+size_t myprint_listStr(const list_t *);
+int node_del_index(list_t **, unsigned int);
+void node_list_free(list_t **);
+
+/* Prototypes for list1.c */
+size_t length_list(const list_t *);
+char **string_list(list_t *);
+size_t my_printList(const list_t *);
+list_t *node_begins_with(list_t *, char *, char);
+ssize_t get_index_node(list_t *, list_t *);
+
+/* Prototype for vars.c */
+int _chain(info_t *, char *, size_t *);
+void scan_chain(info_t *, char *, size_t *, size_t, size_t);
+int change_alias(info_t *);
+int change_vars(info_t *);
+int change_string(char **, char *);
 
 #endif
 

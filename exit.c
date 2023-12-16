@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- **string_copy -  Function that copies a string
- *@dest: the destination string 
+ **strn_copy -  Function that copies a string
+ *@dest: the destination string
  *@src: the source string
  *@n: the number of characters
  *Return: the concatenated string
  */
-char *string_copy(char *dest, char *src, int n)
+char *strn_copy(char *dest, char *src, int n)
 {
 	int i, j;
 	char *s = dest;

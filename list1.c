@@ -18,11 +18,11 @@ size_t length_list(const list_t *h)
 }
 
 /**
- * strings_lists -  Function that returns an array of strings of the list
+ * string_list -  Function that returns an array of strings of the list
  * @head: A pointer to first node
  * Return:  An array of strings
  */
-char **strings_lists(list_t *head)
+char **string_list(list_t *head)
 {
 	list_t *node = head;
 	size_t i = length_list(head), j;
@@ -52,12 +52,12 @@ char **strings_lists(list_t *head)
 	return (strs);
 }
 
-
 /**
  * my_printList -  Function that prints all elements of a list_t linked list
  * @h: pointer
  * Return:  The size of list
  */
+
 size_t my_printList(const list_t *h)
 {
 	size_t i = 0;
@@ -74,16 +74,15 @@ size_t my_printList(const list_t *h)
 	}
 	return (i);
 }
-
 /**
- * node_creates - Function returns node
+ * node_begins_with - Function returns node
  * @node:  A pointer to list head
- * @prefix: string 
- * @c: next character 
+ * @prefix: string
+ * @c: next character
  *
  * Return: If successful match node OR NULL if not
  */
-list_t *node_create(list_t *node, char *prefix, char c)
+list_t *node_begins_with(list_t *node, char *prefix, char c)
 {
 	char *p = NULL;
 

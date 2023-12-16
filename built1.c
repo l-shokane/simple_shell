@@ -10,7 +10,7 @@ int shell_exit(info_t *info)
 {
 	int exitcheck;
 
-	if (info->argv[1])
+	if (info->argv[1])  /* If there is an exit arguement */
 	{
 		exitcheck = erra_toi(info->argv[1]);
 		if (exitcheck == -1)
@@ -29,11 +29,11 @@ int shell_exit(info_t *info)
 }
 
 /**
- * my_cd - Function that changes the current directory of the process
+ * shell_cd - Function that changes the current directory of the process
  * @info: A struct parameters
  *  Return: Always 0
  */
-int my_cd(info_t *info)
+int shell_cd(info_t *info)
 {
 	char *s, *dir, buffer[1024];
 	int chdir_ret;
@@ -41,11 +41,11 @@ int my_cd(info_t *info)
 	s = getcwd(buffer, 1024);
 	if (!s)
 		my_print("HERE: >>getcwd failure emsg here<<\n");
-	if (!inf->argv[1])
+	if (!info->argv[1])
 	{
 		dir = get_env(info, "HOME=");
 		if (!dir)
-			chdir_ret = /* TODO: This should be? */ 
+			chdir_ret = /* HERE: This becomes?? */
 				chdir((dir = get_env(info, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
@@ -58,15 +58,15 @@ int my_cd(info_t *info)
 			_putchar('\n');
 			return (1);
 		}
-		_puts(get_env(inf, "OLDPWD=")), _putchar('\n');
-		chdir_ret = /* TODO: This should be? */
+		my_print(get_env(info, "OLDPWD=")), _putchar('\n');
+		chdir_ret = /* HERE: This becomes? */
 			chdir((dir = get_env(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
 		chdir_ret = chdir(info->argv[1]);
 	if (chdir_ret == -1)
 	{
-		my_printError(info, "can't cd to ");
+		my_printError(info, "canno't cd to ");
 		emy_print(info->argv[1]), _eputchar('\n');
 	}
 	else
@@ -82,13 +82,14 @@ int my_cd(info_t *info)
  * @info: A struct parameter
  *  Return: Always 0
  */
+
 int shell_help(info_t *info)
 {
 	char **arg_array;
 
 	arg_array = info->argv;
-	my_print("Help call works. Function not yet implemented \n");
+	my_print("help call success. Function not yet implemented \n");
 	if (0)
-		my_print(*arg_array); /* temp att_unused workaround */
+		my_print(*arg_array); /*The temp att_unused workaround */
 	return (0);
 }

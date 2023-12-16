@@ -42,23 +42,23 @@ list_t *node_next(list_t **head, const char *str, int num)
  */
 list_t *add_end_node(list_t **head, const char *str, int num)
 {
-	list_t *node_new, *node;
+	list_t *new_node, *node;
 
 	if (!head)
 		return (NULL);
 
 	node = *head;
-	node_new = malloc(sizeof(list_t));
+	new_node = malloc(sizeof(list_t));
 	if (!new_node)
 		return (NULL);
 	shell_memset((void *)new_node, 0, sizeof(list_t));
-	node_new->num = num;
+	new_node->num = num;
 	if (str)
 	{
-		node_new->str = strd_up(str);
-	if (!node_new->str)
+		new_node->str = strd_up(str);
+		if (!new_node->str)
 		{
-			free(node_new);
+			free(new_node);
 			return (NULL);
 		}
 	}
@@ -66,11 +66,11 @@ list_t *add_end_node(list_t **head, const char *str, int num)
 	{
 		while (node->next)
 			node = node->next;
-		node->next = node_new;
+		node->next = new_node;
 	}
 	else
-		*head = node_new;
-	return (node_new);
+		*head = new_node;
+	return (new_node);
 }
 
 /**
@@ -95,7 +95,7 @@ size_t myprint_listStr(const list_t *h)
 
 /**
  * node_del_index - Function that deletes node at given index
- * @head: Address of pointer 
+ * @head: Address of pointer
  * @index: index of node
  *
  * Return: If successful 1 or 0 if it fails.
@@ -139,7 +139,7 @@ int node_del_index(list_t **head, unsigned int index)
  */
 void node_list_free(list_t **head_ptr)
 {
-	list_t *node, *node_next, *head;
+	list_t *node, *next_node, *head;
 
 	if (!head_ptr || !*head_ptr)
 		return;
@@ -150,7 +150,7 @@ void node_list_free(list_t **head_ptr)
 		next_node = node->next;
 		free(node->str);
 		free(node);
-		node = node_next;
+		node = next_node;
 	}
 	*head_ptr = NULL;
 }

@@ -39,12 +39,13 @@ int _eputchar(char c)
 }
 
 /**
- * my_printfd - Function that writes the character c to given fd
- * @c: The character 
+ * my_printsfd - Function that writes the character c to given fd
+ * @c: The character
  * @fd: The file descriptor to write to
  * Return: If successful 1 OR -1 if error
  */
-int my_printfd(char c, int fd)
+
+int my_printsfd(char c, int fd)
 {
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
@@ -73,7 +74,7 @@ int my_printfd(char *str, int fd)
 		return (0);
 	while (*str)
 	{
-		i += _putfd(*str++, fd);
+		i += my_printsfd(*str++, fd);
 	}
 	return (i);
 }

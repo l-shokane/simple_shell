@@ -2,12 +2,12 @@
 
 /**
  * interactive - returns true if shell is interactive mode
- * @inf: A struct parameter
+ * @info: A struct parameter
  * Return: if successful 1 or 0 if not.
  */
-int interactive(inf_t *inf)
+int interactive(info_t *info)
 {
-	return (isatty(STDIN_FILENO) && inf->readfd <= 2);
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 /**

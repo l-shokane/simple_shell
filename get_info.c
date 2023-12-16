@@ -1,10 +1,11 @@
 #include "shell.h"
 
 /**
- * init_inf - Function that initializes inf_t struct
+ * init_info - Function that initializes inf_t struct
  * @info: A struct parameter
  */
-void init_inf(info_t *info)
+
+void init_info(info_t *info)
 {
 	info->arg = NULL;
 	info->argv = NULL;
@@ -13,25 +14,25 @@ void init_inf(info_t *info)
 }
 
 /**
- * put_inf - Function that initializes inf_t struct
+ * put_info - Function that initializes info_t struct
  * @info: A struct parameter
  * @av: argument vector
  */
-void put_inf(info_t *info, char **av)
+void put_info(info_t *info, char **av)
 {
 	int i = 0;
 
 	info->fname = av[0];
 	if (info->arg)
 	{
-		info->argv = strtow(info->arg, " \t");
+		info->argv = split_str(info->arg, " \t");
 		if (!info->argv)
 		{
 
 			info->argv = malloc(sizeof(char *) * 2);
 			if (info->argv)
 			{
-				info->argv[0] = strd_up(inf->arg);
+				info->argv[0] = strd_up(info->arg);
 				info->argv[1] = NULL;
 			}
 		}
@@ -45,13 +46,13 @@ void put_inf(info_t *info, char **av)
 }
 
 /**
- * rem_inf - Function that frees inf_t struct fields
+ * rem_info - Function that frees info_t struct fields
  * @info:  A struct parameter
- * @all: True 
+ * @all: True
  */
-void rem_inf(info_t *info, int all)
+void rem_info(info_t *info, int all)
 {
-	free_str(info->argv);
+	ffree(info->argv);
 	info->argv = NULL;
 	info->path = NULL;
 	if (all)
@@ -64,10 +65,10 @@ void rem_inf(info_t *info, int all)
 			node_list_free(&(info->history));
 		if (info->alias)
 			node_list_free(&(info->alias));
-		free_str(info->environ);
-		inf->environ = NULL;
+		ffree(info->environ);
+			info->environ = NULL;
 		bfree((void **)info->cmd_buf);
-		if (inf->readfd > 2)
+		if (info->readfd > 2)
 			close(info->readfd);
 		_putchar(BUF_FLUSH);
 	}

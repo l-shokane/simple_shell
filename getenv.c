@@ -7,10 +7,10 @@
  */
 char **get_environ(info_t *info)
 {
-	if (!inf->environ || inf->env_swapped)
+	if (!info->environ || info->env_swapped)
 	{
-		inf->environ = strings_lists(inof->env);
-		inf->env_swapped = 0;
+		info->environ = string_list(info->env);
+		info->env_swapped = 0;
 	}
 
 	return (info->environ);
@@ -32,7 +32,7 @@ int unset_env(info_t *info, char *var)
 		return (0);
 
 	while (node)
-{
+	{
 		p = begins_with(node->str, var);
 		if (p && *p == '=')
 		{
@@ -67,17 +67,17 @@ int set_env(info_t *info, char *var, char *value)
 	if (!buf)
 		return (1);
 	copy_str(buf, var);
-	str_cnct(buf, "=");
-	str_cnct(buf, value);
-	node = inf->env;
+	str_cat(buf, "=");
+	str_cat(buf, value);
+	node = info->env;
 	while (node)
 	{
 		p = begins_with(node->str, var);
 		if (p && *p == '=')
 		{
 			free(node->str);
-		node->str = buf;
-			inf->env_swapped = 1;
+			node->str = buf;
+			info->env_swapped = 1;
 			return (0);
 		}
 		node = node->next;

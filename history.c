@@ -13,13 +13,13 @@ char *get_his_file(info_t *info)
 	dir = get_env(info, "HOME=");
 	if (!dir)
 		return (NULL);
-	buf = malloc(sizeof(char) * (str_length(dir) + str_length(HISTORY_FILE) + 2));
+	buf = malloc(sizeof(char) * (str_length(dir) + str_length(HIST_FILE) + 2));
 	if (!buf)
 		return (NULL);
 	buf[0] = 0;
 	copy_str(buf, dir);
-	str_cnct(buf, "/");
-	str_cnct(buf, HISTORY_FILE);
+	str_cat(buf, "/");
+	str_cat(buf, HIST_FILE);
 	return (buf);
 }
 
@@ -29,7 +29,7 @@ char *get_his_file(info_t *info)
  *
  * Return: if successful 1 or -1 if not.
  */
-int write_hist(info_t *info)
+int write_his(info_t *info)
 {
 	ssize_t fd;
 	char *filename = get_his_file(info);
@@ -45,9 +45,9 @@ int write_hist(info_t *info)
 	for (node = info->history; node; node = node->next)
 	{
 		my_printfd(node->str, fd);
-		my_printfd('\n', fd);
+		my_printsfd('\n', fd);
 	}
-	my_printfd(BUF_FLUSH, fd);
+	my_printsfd(BUF_FLUSH, fd);
 	close(fd);
 	return (1);
 }
@@ -87,9 +87,9 @@ int scan_his(info_t *info)
 	for (i = 0; i < fsize; i++)
 		if (buf[i] == '\n')
 		{
-		buf[i] = 0;
-		make_his_list(info, buf + last, linecount++);
-		last = i + 1;
+			buf[i] = 0;
+			make_his_list(info, buf + last, linecount++);
+			last = i + 1;
 		}
 	if (last != i)
 		make_his_list(info, buf + last, linecount++);
@@ -100,7 +100,6 @@ int scan_his(info_t *info)
 	new_numHis(info);
 	return (info->histcount);
 }
-
 /**
  * make_his_list - Function that adds entry to history linked list
  * @info: A struct parameter

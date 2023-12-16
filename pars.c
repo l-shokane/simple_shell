@@ -1,13 +1,14 @@
 #include "shell.h"
 
 /**
- * exec_cmd - Function that determines if
- * 	a file is an executable command
+ *_cmd - Function that determines if
+ * a file is an executable command
  * @info: A struct parameter
  * @path: A path for the file
  * Return: if successful 1 OR 0 if not
  */
-int is_cmd(info_t *info, char *path)
+
+int _cmd(info_t *info, char *path)
 {
 	struct stat st;
 
@@ -23,18 +24,18 @@ int is_cmd(info_t *info, char *path)
 }
 
 /**
- * copy_chars -  Function that duplicates characters
+ * dup_chars -  Function that duplicates characters
  * @pathstr: PATH string
- * @begin: starting index
- * @end: stopping index
+ * @start: starting index
+ * @stop: stopping index
  * Return: A pointer to new buffer
  */
-char *copy_chars(char *pathstr, int begin, int end)
+char *dup_chars(char *pathstr, int start, int stop)
 {
 	static char buf[1024];
 	int i = 0, k = 0;
 
-	for (k = 0, i = start; i < end; i++)
+	for (k = 0, i = start; i < stop; i++)
 		if (pathstr[i] != ':')
 			buf[k++] = pathstr[i];
 	buf[k] = 0;
@@ -57,22 +58,22 @@ char *disc_path(info_t *info, char *pathstr, char *cmd)
 		return (NULL);
 	if ((str_length(cmd) > 2) && begins_with(cmd, "./"))
 	{
-		if (exec_cmd(info, cmd))
+		if (_cmd(info, cmd))
 			return (cmd);
 	}
 	while (1)
 	{
 		if (!pathstr[i] || pathstr[i] == ':')
 		{
-			path = copy_chars(pathstr, curr_pos, i);
+			path = dup_chars(pathstr, curr_pos, i);
 			if (!*path)
-				str_cnct(path, cmd);
+				str_cat(path, cmd);
 			else
 			{
-				str_cnct(path, "/");
-				strc_cnct(path, cmd);
+				str_cat(path, "/");
+				str_cat(path, cmd);
 			}
-			if (exec_cmd(inof, path))
+			if (_cmd(info, path))
 				return (path);
 			if (!pathstr[i])
 				break;

@@ -13,41 +13,31 @@ int hsh(info_t *info, char **av)
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear_inf(info);
-		if (interactive(inf))
-		{
-		my_print("simple_shell$ ");
-		}
+		init_info(info);
+		if (interactive(info))
+			my_print("simple_shell$ ");
 		_eputchar(BUF_FLUSH);
-		r = input_line(inf);
-	if (r != -1)
-	{
-		put_inf(info, av);
-		builtinles = disc_builtin(info);
-		if (builtin_ret == -1)
+		r = input_line(info);
+		if (r != -1)
 		{
-			disc_cmd(inf);
+			put_info(info, av);
+			builtin_ret = disc_builtin(info);
+			if (builtin_ret == -1)
+				disc_cmd(info);
 		}
-	}
-	else if (interactive(info))
-	{
-		_putchar('\n');
-	}
-	rem_inf(info, 0);
+		else if (interactive(info))
+			_putchar('\n');
+		rem_info(info, 0);
 	}
 	write_his(info);
-	rem_inf(info, 1);
+	rem_info(info, 1);
 	if (!interactive(info) && info->status)
-	{
 		exit(info->status);
-	}
 	if (builtin_ret == -2)
 	{
 		if (info->err_num == -1)
-	{
-		exit(info->status);
-	}
-	exit(info->err_num);
+			exit(info->status);
+		exit(info->err_num);
 	}
 	return (builtin_ret);
 }
@@ -64,24 +54,23 @@ int disc_builtin(info_t *info)
 {
 	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
-	{"exit", exit_shell},
-	{"env", shell_env},
-	{"help", shell_help},
-	{"history", shell_history},
-	{"setenv", shell_setenv},
-	{"unsetenv", shell_unsetenv},
-	{"cd", shell_cd},
-	{"alias", shell_alias},
-	{NULL, NULL}};
+		{"exit", shell_exit},
+		{"env", shell_env},
+		{"help", shell_help},
+		{"history", shell_history},
+		{"setenv", shell_setenv},
+		{"unsetenv", shell_unsetenv},
+		{"cd", shell_cd},
+		{"alias", shell_alias},
+		{NULL, NULL}
+	};
 
 	for (i = 0; builtintbl[i].type; i++)
+		if (str_cmp(info->argv[0], builtintbl[i].type) == 0)
 		{
-			if (str_cmp(info->argv[0], builtintbl[i].type) == 0)
-			{
-			inf->line_count++;
+			info->line_count++;
 			built_in_ret = builtintbl[i].func(info);
-		break;
-			}
+			break;
 		}
 	return (built_in_ret);
 }
@@ -97,39 +86,32 @@ void disc_cmd(info_t *info)
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
-		{
-			info->line_count++;
-			info->linecount_flag = 0;
-		}
+	{
+		info->line_count++;
+		info->linecount_flag = 0;
+	}
 	for (i = 0, k = 0; info->arg[i]; i++)
-	{
 		if (!_delim(info->arg[i], " \t\n"))
-		{
 			k++;
-		}
-	}
 	if (!k)
-	{
 		return;
-	}
 
-	path = disc_path(info, get_env(inf, "PATH="), inf->argv[0]);
+	path = disc_path(info, get_env(info, "PATH="), info->argv[0]);
 	if (path)
 	{
-		infi->path = path;
-		exec_fork(infi);
+		info->path = path;
+		exec_fork(info);
 	}
-		else
+	else
 	{
-		if ((interactive(info) || get_env(info, "PATH=") || info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
-	{
-	exec_fork(info);
-	}
-	else if (*(info->arg) != '\n')
-	{
-		info->status = 127;
-		my_printError(inf, "not found\n");
-	}
+		if ((interactive(info) || get_env(info, "PATH=")
+			|| info->argv[0][0] == '/') && _cmd(info, info->argv[0]))
+			exec_fork(info);
+		else if (*(info->arg) != '\n')
+		{
+			info->status = 127;
+			my_printError(info, "not found\n");
+		}
 	}
 }
 
@@ -137,39 +119,36 @@ void disc_cmd(info_t *info)
  * exec_fork - Function that forks an exec thread to run cmd
  * @info: A struct parameter
  */
-void exec_fork(info_t *inf)
+void exec_fork(info_t *info)
 {
 	pid_t child_pid;
 
 	child_pid = fork();
 	if (child_pid == -1)
 	{
+		/* HERE: MUST PLACE AN ERROR FUNC */
 		perror("Error:");
 		return;
 	}
 	if (child_pid == 0)
 	{
 		if (execve(info->path, info->argv, get_environ(info)) == -1)
-	{
-		rem_inf(info, 1);
-		if (errno == EACCES)
 		{
-			exit(126);
+			rem_info(info, 1);
+			if (errno == EACCES)
+				exit(126);
+			exit(1);
 		}
-	exit(1);
-	}
-
+		/* HERE: MUST INSERT ERROR FUNCTION */
 	}
 	else
 	{
-	wait(&(info->status));
-	if (WIFEXITED(info->status))
-	{
-		info->status = WEXITSTATUS(info->status);
-	if (info->status == 126)
-	{
-		my_printError(info, "Permission denied\n");
-	}
-	}
+		wait(&(info->status));
+		if (WIFEXITED(info->status))
+		{
+			info->status = WEXITSTATUS(info->status);
+			if (info->status == 126)
+				my_printError(info, "Permission denied\n");
+		}
 	}
 }

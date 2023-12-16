@@ -7,7 +7,7 @@
  */
 int shell_env(info_t *info)
 {
-	my_printListStr(inf->env);
+	myprint_listStr(info->env);
 	return (0);
 }
 
@@ -19,7 +19,7 @@ int shell_env(info_t *info)
  */
 char *get_env(info_t *info, const char *name)
 {
-	list_t *node = inf->env;
+	list_t *node = info->env;
 	char *p;
 
 	while (node)
@@ -60,7 +60,7 @@ int shell_unsetenv(info_t *info)
 
 	if (info->argc == 1)
 	{
-		emy_print("Too few arguments.\n");
+		emy_print("Too few arguements.\n");
 		return (1);
 	}
 	for (i = 1; i <= info->argc; i++)
@@ -70,11 +70,11 @@ int shell_unsetenv(info_t *info)
 }
 
 /**
- * pop_env_list - Function that populates env linked list
+ * pop_list_env - Function that populates env linked list
  * @info: A struct parameter
  * Return: Always 0
  */
-int pop_env_list(info_t *info)
+int pop_list_env(info_t *info)
 {
 	list_t *node = NULL;
 	size_t i;
@@ -82,6 +82,5 @@ int pop_env_list(info_t *info)
 	for (i = 0; environ[i]; i++)
 		add_end_node(&node, environ[i], 0);
 	info->env = node;
-
 	return (0);
 }
